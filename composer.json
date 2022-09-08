@@ -1,12 +1,13 @@
 {
-    "name": "rulilg/laravel-stablediffusion",
+    "name": "rulilg/laravel-stable-diffusion",
     "description": "Stable Diffusion integration with Replicate and Laravel",
     "keywords": [
         "RuliLG",
         "laravel",
-        "laravel-stablediffusion"
+        "stable diffusion",
+        "laravel-stable-diffusion"
     ],
-    "homepage": "https://github.com/rulilg/laravel-stablediffusion",
+    "homepage": "https://github.com/rulilg/laravel-stable-diffusion",
     "license": "MIT",
     "authors": [
         {
@@ -35,7 +36,6 @@
     "autoload": {
         "psr-4": {
             "RuliLG\\StableDiffusion\\": "src",
-            "RuliLG\\StableDiffusion\\Database\\Factories\\": "database/factories"
         }
     },
     "autoload-dev": {
