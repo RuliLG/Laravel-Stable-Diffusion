@@ -1,83 +1,140 @@
 # Stable Diffusion integration with Replicate and Laravel
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/rulilg/laravel-stablediffusion.svg?style=flat-square)](https://packagist.org/packages/rulilg/laravel-stablediffusion)
-[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/rulilg/laravel-stablediffusion/run-tests?label=tests)](https://github.com/rulilg/laravel-stablediffusion/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/rulilg/laravel-stablediffusion/Fix%20PHP%20code%20style%20issues?label=code%20style)](https://github.com/rulilg/laravel-stablediffusion/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/rulilg/laravel-stablediffusion.svg?style=flat-square)](https://packagist.org/packages/rulilg/laravel-stablediffusion)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/rulilg/laravel-stable-diffusion.svg?style=flat-square)](https://packagist.org/packages/rulilg/laravel-stable-diffusion)
+[![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/rulilg/laravel-stable-diffusion/Fix%20PHP%20code%20style%20issues?label=code%20style)](https://github.com/rulilg/laravel-stable-diffusion/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
+[![Total Downloads](https://img.shields.io/packagist/dt/rulilg/laravel-stable-diffusion.svg?style=flat-square)](https://packagist.org/packages/rulilg/laravel-stable-diffusion)
 
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
+Laravel wrapper around the Replicate API to use Stable Diffusion to generate text2img.
 
-## Support us
-
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/Laravel-StableDiffusion.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/Laravel-StableDiffusion)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+- 🎨 Built-in prompt helper to create better images
+- 🚀 Store the results in your database
+- 🎇 Generate multiple images in the same API call
 
 ## Installation
 
 You can install the package via composer:
 
 ```bash
-composer require rulilg/laravel-stablediffusion
+composer require rulilg/laravel-stable-diffusion
 ```
 
 You can publish and run the migrations with:
 
 ```bash
-php artisan vendor:publish --tag="laravel-stablediffusion-migrations"
+php artisan vendor:publish --tag="stable-diffusion-migrations"
 php artisan migrate
 ```
 
 You can publish the config file with:
 
 ```bash
-php artisan vendor:publish --tag="laravel-stablediffusion-config"
+php artisan vendor:publish --tag="stable-diffusion-config"
 ```
 
 This is the contents of the published config file:
 
 ```php
 return [
+    'url' => env('REPLICATE_URL', 'https://api.replicate.com/v1/predictions'),
+    'token' => env('REPLICATE_TOKEN'),
+    'version' => env('REPLICATE_STABLEDIFFUSION_VERSION', 'a9758cbfbd5f3c2094457d996681af52552901775aa2d6dd0b17fd15df959bef'),
 ];
+
 ```
+
+Register in [Replicate](https://replicate.com/) and store your token in the `REPLICATE_TOKEN` .env variable.
 
 Optionally, you can publish the views using
 
 ```bash
-php artisan vendor:publish --tag="laravel-stablediffusion-views"
+php artisan vendor:publish --tag="laravel-stable-diffusion-views"
 ```
 
 ## Usage
 
 ```php
-$stableDiffusion = new RuliLG\StableDiffusion();
-echo $stableDiffusion->echoPhrase('Hello, RuliLG!');
+use RuliLG\StableDiffusion\StableDiffusion;
+use RuliLG\StableDiffusion\Prompt;
+
+StableDiffusion::make()
+    ->withPrompt(
+        Prompt::make()
+            ->with('a panda sitting on the streets of New York after a long day of walking')
+            ->photograph()
+            ->resolution8k()
+            ->trendingOnArtStation()
+            ->highlyDetailed()
+            ->dramaticLighting()
+            ->octaneRender()
+    )
+    ->generate(4);
 ```
 
-## Testing
+There are several styles already built-in:
 
-```bash
-composer test
-```
+Method | Prompt modification
+---- | ----
+`realistic()` | {prompt}, realistic
+`hyperrealistic()` | {prompt}, hyperrealistic
+`conceptArt()` | {prompt}, concept art
+`abstractArt()` | {prompt}, abstract art
+`oilPainting()` | {prompt}, oil painting
+`watercolor()` | {prompt}, watercolor
+`acrylic()` | {prompt}, acrylic
+`pencilDrawing()` | {prompt}, pencil drawing
+`digitalPainting()` | {prompt}, digital painting
+`penDrawing()` | {prompt}, pen drawing
+`charcoalDrawing()` | {prompt}, charcoal drawing
+`byPicasso()` | {prompt}, by Pablo Picasso
+`byVanGogh()` | {prompt}, by Vincent Van Gogh
+`byRembrandt()` | {prompt}, by Rembrandt
+`byMunch()` | {prompt}, by Edvard Munch
+`byKlimt()` | {prompt}, by Paul Klimt
+`byKandinsky()` | {prompt}, by Jackson Pollock
+`byMonet()` | {prompt}, by Claude Monet
+`byDali()` | {prompt}, by Salvador Dali
+`byDegas()` | {prompt}, by Edgar Degas
+`byKahlo()` | {prompt}, by Frida Kahlo
+`byCezanne()` | {prompt}, by Pablo Cezanne
+`photograph()` | a photo of {prompt}
+`highlyDetailed()` | {prompt}, highly detailed
+`surrealism()` | {prompt}, surrealism
+`trendingOnArtStation()` | {prompt}, trending on art station
+`triadicColorScheme()` | {prompt}, triadic color scheme
+`smooth()` | {prompt}, smooth
+`sharpFocus()` | {prompt}, sharp focus
+`matte()` | {prompt}, matte
+`elegant()` | {prompt}, elegant
+`theMostBeautifulImageEverSeen()` | {prompt}, the most beautiful image ever seen
+`illustration()` | {prompt}, illustration
+`digitalPaint()` | {prompt}, digital paint
+`dark()` | {prompt}, dark
+`gloomy()` | {prompt}, gloomy
+`octaneRender()` | {prompt}, octane render
+`resolution8k()` | {prompt}, 8k
+`resolution4k()` | {prompt}, 4k
+`washedColors()` | {prompt}, washed colors
+`sharp()` | {prompt}, sharp
+`dramaticLighting()` | {prompt}, dramatic lighting
+`beautiful()` | {prompt}, beautiful
+`postProcessing()` | {prompt}, post processing
+`pictureOfTheDay()` | {prompt}, picture of the day
+`ambientLighting()` | {prompt}, ambient lighting
+`epicComposition()` | {prompt}, epic composition
 
-## Changelog
+Additionally, you can add custom styles with the following methods:
 
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
+- `as(string $canvas)`: to add a string at the beginning (i.e. "a photograph of")
+- `paintingStyle(string $style)`: to add a painting style (i.e. realistic, hiperrealistic, etc.)
+- `by(string $author)`: to instruct the system to paint it with the style of a certain author
+- `effect(string $effect)`: to add a finishing touch to the prompt. You can add as many as you want.
 
-## Contributing
-
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
-
-## Security Vulnerabilities
-
-Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
+To learn more on how to build prompts for Stable Diffusion, please [enter this link](https://beta.dreamstudio.ai/prompt-guide).
 
 ## Credits
 
 - [Raúl López](https://github.com/RuliLG)
-- [All Contributors](../../contributors)
+- [Calima Solutions](https://github.com/calima-solutions)
 
 ## License
 

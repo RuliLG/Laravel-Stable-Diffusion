@@ -16,10 +16,8 @@ class StableDiffusionServiceProvider extends PackageServiceProvider
          * More info: https://github.com/spatie/laravel-package-tools
          */
         $package
-            ->name('laravel-stablediffusion')
+            ->name('laravel-stable-diffusion')
             ->hasConfigFile()
-            ->hasViews()
-            ->hasMigration('create_laravel-stablediffusion_table')
-            ->hasCommand(StableDiffusionCommand::class);
+            ->hasMigration('create_stable_diffusion_results_table');
     }
 }
