@@ -83,6 +83,7 @@ class StableDiffusion
                 'version' => config('stable-diffusion.version'),
                 'input' => [
                     'prompt' => $this->prompt->toString(),
+                    'num_outputs' => $numberOfImages,
                 ],
             ])
             ->json();
