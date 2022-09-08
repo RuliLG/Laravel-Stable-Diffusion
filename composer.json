@@ -35,7 +35,7 @@
     },
     "autoload": {
         "psr-4": {
-            "RuliLG\\StableDiffusion\\": "src",
+            "RuliLG\\StableDiffusion\\": "src"
         }
     },
     "autoload-dev": {
