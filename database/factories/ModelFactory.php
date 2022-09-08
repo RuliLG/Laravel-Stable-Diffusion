@@ -1,6 +1,6 @@
 <?php
 
-namespace VendorName\Skeleton\Database\Factories;
+namespace RuliLG\StableDiffusion\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
