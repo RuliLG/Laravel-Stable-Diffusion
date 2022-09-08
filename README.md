@@ -52,6 +52,10 @@ php artisan vendor:publish --tag="laravel-stable-diffusion-views"
 
 ## Usage
 
+It's important to understand that the image generation process is **async**. We need first to send a request to Replicate and, after a few seconds, we can fetch the results back.
+
+This is the code we need to generate an image. This will return a `StableDiffusionResult` model.
+
 ```php
 use RuliLG\StableDiffusion\StableDiffusion;
 use RuliLG\StableDiffusion\Prompt;
@@ -69,6 +73,59 @@ StableDiffusion::make()
     )
     ->generate(4);
 ```
+
+After the `generate()` method is called, an API request to Replicate is sent so they can start processing the prompt. This will generate a record in our database with a `status="starting"` value, and the ID returned by Replicate.
+
+To retrieve the results back from Replicate, we need to run the following code:
+
+```php
+use RuliLG\StableDiffusion\StableDiffusion;
+
+// we get the Replicate ID and fetch the results back.
+// This method will automatically update the record with the new information
+$freshResults = StableDiffusion::get($result->replicate_id);
+if ($freshResults->is_successful) {
+    dd($freshResults->output); // List of URLs with the images
+}
+```
+
+If the results were already fetched, then no API request will be made, so we can safely call this method every time.
+
+### The StableDiffusionResult model
+
+After a request to Replicate is made, a new record is inserted in your database with the following information:
+
+Column | Description
+----- | -----
+replicate_id | ID from Replicate, which we can use to retrieve the results back
+user_prompt | Prompt passed to the `Prompt::make()->with()` method
+full_prompt | Prompt generated with all the modifiers
+url | Internal URL to fetch the results back from Replicate
+status | Status. Can be one of: `starting`, `processing`, `succeeded`, `failed` or `cancelled`. This library doesn't support cancelling requests.
+output | Array of URLs containing the images
+error | Error description if needed (i.e. no NSFW content is allowed)
+predict_time | Time spent by Replicate processing your image, which you will be charged for
+
+Additionally, the model has the following attributes to know the status of the prediction:
+
+- `$result->is_successful`
+- `$result->is_failed`
+- `$result->is_starting`
+- `$result->is_processing`
+
+Also, as results have to be manually updated through the `StableDiffusion::get($id)` method, we can also fetch the results that are not in a finished status:
+
+```php
+use RuliLG\StableDiffusion\Models\StableDiffusionResult;
+use RuliLG\StableDiffusion\StableDiffusion;
+
+$results = StableDiffusionResult::unfinished()->get();
+foreach ($results as $result) {
+    StableDiffusion::get($result->replicate_id);
+}
+```
+
+## Generating prompts
 
 There are several styles already built-in:
 
