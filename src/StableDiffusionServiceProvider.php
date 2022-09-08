@@ -2,7 +2,6 @@
 
 namespace RuliLG\StableDiffusion;
 
-use RuliLG\StableDiffusion\Commands\StableDiffusionCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
