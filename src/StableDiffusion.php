@@ -56,8 +56,12 @@ class StableDiffusion
     public function width(int $width)
     {
         assert($width > 0, 'Width must be greater than 0');
-        assert($width <= 768 && $this->width <= 1024, 'Width must be lower than 768 and height lower than 1024');
-        assert($width <= 1024 && $this->width <= 768, 'Width must be lower than 768 and height lower than 1024');
+        if ($width <= 768) {
+            assert($width <= 768 && $this->width <= 1024, 'Width must be lower than 768 and height lower than 1024');
+        } else {
+            assert($width <= 1024 && $this->width <= 768, 'Width must be lower than 1024 and height lower than 768');
+        }
+
         $this->width = $width;
 
         return $this;
@@ -66,8 +70,12 @@ class StableDiffusion
     public function height(int $height)
     {
         assert($height > 0, 'Height must be greater than 0');
-        assert($height <= 768 && $this->width <= 1024, 'Height must be lower than 768 and width lower than 1024');
-        assert($height <= 1024 && $this->width <= 768, 'Height must be lower than 768 and width lower than 1024');
+        if ($height <= 768) {
+            assert($height <= 768 && $this->width <= 1024, 'Height must be lower than 768 and width lower than 1024');
+        } else {
+            assert($height <= 1024 && $this->width <= 768, 'Height must be lower than 1024 and width lower than 768');
+        }
+
         $this->height = $height;
 
         return $this;
