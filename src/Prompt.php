@@ -9,10 +9,10 @@ use RuliLG\StableDiffusion\Traits\HasPaintingStyles;
 
 class Prompt
 {
-    use HasPaintingStyles;
     use HasAuthors;
     use HasCanvases;
     use HasFinishingTouches;
+    use HasPaintingStyles;
 
     private function __construct(
         protected string $prompt = '',
@@ -20,8 +20,7 @@ class Prompt
         protected ?string $author = null,
         protected ?string $canvas = null,
         protected array $finishingTouches = [],
-    ) {
-    }
+    ) {}
 
     public static function make(): Prompt
     {

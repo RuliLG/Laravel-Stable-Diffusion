@@ -13,8 +13,7 @@ class StableDiffusion
         public ?Prompt $prompt = null,
         private int $width = 512,
         private int $height = 512,
-    ) {
-    }
+    ) {}
 
     public static function make(): self
     {
