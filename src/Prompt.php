@@ -24,7 +24,7 @@ class Prompt
 
     public static function make(): Prompt
     {
-        return new Prompt();
+        return new Prompt;
     }
 
     public function with(string $prompt): static
